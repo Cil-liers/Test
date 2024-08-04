@@ -55,8 +55,8 @@ public class MySolution extends RecursiveTask<Boolean> {
 
 	// Anticipate a problem with this method...
 	public void nextTimeStep() {
-        for(int i=1; i<rows-1; i++ ) {
-            for( int j=1; j<columns-1; j++ ) {
+        for(int i=startRow; i<endRow-1; i++ ) {
+            for( int j=startRow; j<endRow-1; j++ ) {
                 this.newGrid[i][j]=emptyGrid[i][j];
             }
         }
@@ -80,7 +80,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 
 
 	public Boolean compute() {
-		// System.out.println("My name is " + name + " and my area is " + (rows-2)*(columns-2));
+		System.out.println("My name is " + name + " and my area is " + (rows-2)*(columns-2));
 		if ((rows-2)*(columns-2) <= 9) {
 			return update();
 		} else {
@@ -159,6 +159,14 @@ public class MySolution extends RecursiveTask<Boolean> {
 			return array;
 		}
 
+
+	// public class Pool {
+	// 	static final ForkJoinPool pool = new ForkJoinPool();
+	// 	static boolean method(in[][] arr) {
+	// 		return pool.invoke(new MySolution(arr));
+	// 	}
+	// }
+
 	public static void main(String[] args) {
 
 		try {
@@ -168,6 +176,7 @@ public class MySolution extends RecursiveTask<Boolean> {
             System.out.println("The rows of the input grid are " + obj.rows);
             System.out.println("The columns of the input grid are " + obj.columns);
 			pool.invoke(obj);
+			// pool.invoke(obj);
 			obj.printGrid(obj.rows,obj.columns,obj.newGrid);
 
 		} catch (Exception e) {
