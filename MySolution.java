@@ -11,6 +11,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 	int startCol = 1;
 	int endRow;
 	int endCol;
+	int endNum;
 	int[][] emptyGrid = null;
 	int[][] newGrid = null;
 	String name;
@@ -26,7 +27,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 		}
 	}
 
-	public MySolution(int newRows, int newCols, int startR, int startC, int endR, int endC, int[][] grid1, int[][] grid2, String n) {
+	public MySolution(int e,int newRows,int newCols,int startR, int startC, int endR, int endC, int[][] grid1, int[][] grid2, String n) {
 		newGrid = grid1;
 		emptyGrid = grid2;
 		rows = newRows;
@@ -36,12 +37,14 @@ public class MySolution extends RecursiveTask<Boolean> {
 		endRow = endR;
 		endCol = endC;
 		name = n;
+		endNum = e;
 
 	}
 
 	public MySolution(int x, int y) {
 		rows = x+2;
 		columns = y+2;
+		endNum = x+2;
 		emptyGrid = new int[this.rows][this.columns];
 		newGrid = new int[this.rows][this.columns];
 
@@ -64,6 +67,8 @@ public class MySolution extends RecursiveTask<Boolean> {
 
     boolean update() {
         boolean change=false;
+        // System.out.println("The startRow is " + startRow + " and the endRow is " + (endRow-1));
+        System.out.println("The startCol is " + startCol + " and the endCol is " + (endCol-1));
         for( int i = startRow; i<endRow-1; i++ ) {
             for( int j = startCol; j<endCol-1; j++ ) {
                 int num = (newGrid[i][j] % 4) + (newGrid[i-1][j] / 4) + (newGrid[i+1][j] / 4) + (newGrid[i][j-1] / 4) + (newGrid[i][j+1] / 4);
@@ -81,29 +86,34 @@ public class MySolution extends RecursiveTask<Boolean> {
 
 	public Boolean compute() {
 		System.out.println("My name is " + name + " and my area is " + (rows-2)*(columns-2));
+		int end = endNum;
 		if ((rows-2)*(columns-2) <= 9) {
 			return update();
 		} else {
-
-			// int newRAndC = ((rows-2)/2);
 			int split = ((rows-2)/2)+2;
-			
-			MySolution topLeft = new MySolution(split,split,1,1,split,split,newGrid,emptyGrid,"topLeft");
-			MySolution topRight = new MySolution(split,split,1,split-1,split,columns,newGrid,emptyGrid,"topRight");
-			MySolution bottomLeft = new MySolution(split,split,split-1,1,rows,split,newGrid,emptyGrid,"bottomLeft");
-			MySolution bottomRight = new MySolution(split,split,split-1,split-1,rows,columns,newGrid,emptyGrid,"bottomRight");
+			int num = ((rows-2)/2);
+			int start = num
+			// int split = ((rows-2)/2)+2;
+			System.out.println("The split is " + split);
+			System.out.println("The startRow is " + 1 + " and the endRow is " + (split-1));
+			System.out.println("The startCol is " + (split-1) + " and the endCol is " + (end));
+			// MySolution topLeft = new MySolution(end,split,split,1,1,split,split,newGrid,emptyGrid,"topLeft");
+			MySolution topRight = new MySolution(end,split,split,1,split-1,split,end,newGrid,emptyGrid,"topRight");
+			// MySolution bottomLeft = new MySolution(end,split,split,split-1,1,end,split,newGrid,emptyGrid,"bottomLeft");
+			// MySolution bottomRight = new MySolution(end,split,split,split-1,split-1,end,end,newGrid,emptyGrid,"bottomRight");
 
 			
-			topLeft.fork();
+			// topLeft.fork();
 			topRight.fork();
-			bottomLeft.fork();
+			// bottomLeft.fork();
 
-			boolean ans1 = bottomRight.compute();
-			boolean ans2 = topLeft.join();
+			// boolean ans1 = bottomRight.compute();
+			// boolean ans2 = topLeft.join();
 			boolean ans3 = topRight.join();
-			boolean ans4 = bottomLeft.join();
+			// boolean ans4 = bottomLeft.join();
 
-			return ans1 & ans2 & ans3 & ans4;
+			// return ans1 & ans2 & ans3 & ans4;
+			return ans3;
  
 		}
 
