@@ -13,7 +13,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 	int endCol;
 	int[][] emptyGrid = null;
 	int[][] newGrid = null;
-	
+	String name;
 
 
 
@@ -26,7 +26,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 		}
 	}
 
-	public MySolution(int newRows, int newCols, int startR, int startC, int endR, int endC, int[][] grid1, int[][] grid2) {
+	public MySolution(int newRows, int newCols, int startR, int startC, int endR, int endC, int[][] grid1, int[][] grid2, String n) {
 		newGrid = grid1;
 		emptyGrid = grid2;
 		rows = newRows;
@@ -35,6 +35,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 		startCol = startC;
 		endRow = endR;
 		endCol = endC;
+		name = n;
 
 	}
 
@@ -79,15 +80,18 @@ public class MySolution extends RecursiveTask<Boolean> {
 
 
 	public Boolean compute() {
+		// System.out.println("My name is " + name + " and my area is " + (rows-2)*(columns-2));
 		if ((rows-2)*(columns-2) <= 9) {
 			return update();
 		} else {
-			int newRAndC = ((rows-2)/2);
+
+			// int newRAndC = ((rows-2)/2);
 			int split = ((rows-2)/2)+2;
-			MySolution topLeft = new MySolution(newRAndC,newRAndC,1,1,split,split,newGrid,emptyGrid);
-			MySolution topRight = new MySolution(newRAndC,newRAndC,1,split-1,split,columns,newGrid,emptyGrid);
-			MySolution bottomLeft = new MySolution(newRAndC,newRAndC,split-1,1,rows,split,newGrid,emptyGrid);
-			MySolution bottomRight = new MySolution(newRAndC,newRAndC,split-1,split-1,rows,columns,newGrid,emptyGrid);
+			
+			MySolution topLeft = new MySolution(split,split,1,1,split,split,newGrid,emptyGrid,"topLeft");
+			MySolution topRight = new MySolution(split,split,1,split-1,split,columns,newGrid,emptyGrid,"topRight");
+			MySolution bottomLeft = new MySolution(split,split,split-1,1,rows,split,newGrid,emptyGrid,"bottomLeft");
+			MySolution bottomRight = new MySolution(split,split,split-1,split-1,rows,columns,newGrid,emptyGrid,"bottomRight");
 
 			
 			topLeft.fork();
@@ -99,19 +103,11 @@ public class MySolution extends RecursiveTask<Boolean> {
 			boolean ans3 = topRight.join();
 			boolean ans4 = bottomLeft.join();
 
-			// topLeft.fork();
-			// topRight.fork();
-			// boolean ans1 = bottomLeft.compute();
-			// boolean ans2 = topLeft.join();
-			// boolean ans3 = topRight.join();
 			return ans1 & ans2 & ans3 & ans4;
-			// return ans1 & ans2 & ans3;
  
 		}
 
 	}
-
-
 
 	static void printGrid(int rows, int columns, int[][] arr) {
 		int i,j;
@@ -169,21 +165,10 @@ public class MySolution extends RecursiveTask<Boolean> {
 			String file = "8_by_8_all_4copy.csv";
 			MySolution obj = new MySolution(readArrayFromCSV(file));
 			ForkJoinPool pool = new ForkJoinPool();
-			// System.out.println("The number of rows is " + obj.rows);
-			// int split = ((obj.rows-2)/2)+2;
-			// System.out.println("The split is " + split);
-			// MySolution bottomRight = new MySolution(obj.rows,obj.columns,split-1,split-1,obj.newGrid,obj.emptyGrid);
-			// System.out.println("This is the start...");
-			// for( int i = bottomRight.startRow; i<bottomRight.rows-1; i++ ) {
-            // 	for( int j = bottomRight.startCol; j<bottomRight.columns-1; j++ ) {
-            //     	System.out.print(bottomRight.newGrid[i][i]);
-            //     }
-            // 	System.out.println();
-            // }
             System.out.println("The rows of the input grid are " + obj.rows);
             System.out.println("The columns of the input grid are " + obj.columns);
 			pool.invoke(obj);
-			// obj.printGrid(obj.rows,obj.columns,obj.newGrid);
+			obj.printGrid(obj.rows,obj.columns,obj.newGrid);
 
 		} catch (Exception e) {
 			e.printStackTrace();
