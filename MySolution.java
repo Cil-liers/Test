@@ -12,9 +12,10 @@ public class MySolution extends RecursiveTask<Boolean> {
 	int endRow;
 	int endCol;
 	int endNum;
+	int prevStart;
 	int[][] emptyGrid = null;
 	int[][] newGrid = null;
-	String name;
+	
 
 
 
@@ -27,7 +28,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 		}
 	}
 
-	public MySolution(int e,int newRows,int newCols,int startR, int startC, int endR, int endC, int[][] grid1, int[][] grid2, String n) {
+	public MySolution(int ps,int e,int newRows,int newCols,int startR, int startC, int endR, int endC, int[][] grid1, int[][] grid2) {
 		newGrid = grid1;
 		emptyGrid = grid2;
 		rows = newRows;
@@ -36,9 +37,8 @@ public class MySolution extends RecursiveTask<Boolean> {
 		startCol = startC;
 		endRow = endR;
 		endCol = endC;
-		name = n;
 		endNum = e;
-
+		prevStart = ps;
 	}
 
 	public MySolution(int x, int y) {
@@ -58,62 +58,81 @@ public class MySolution extends RecursiveTask<Boolean> {
 
 	// Anticipate a problem with this method...
 	public void nextTimeStep() {
-        for(int i=startRow; i<endRow-1; i++ ) {
-            for( int j=startRow; j<endRow-1; j++ ) {
-                this.newGrid[i][j]=emptyGrid[i][j];
-            }
-        }
-    }
+		// System.out.println("The startRow is " + startRow + " and the endRow is " + (endRow-1));
+		// System.out.println("The startCol is " + startCol + " and the endCol is " + (endCol-1));
+		// System.out.println("The newGrid is currently...");
+		// printGrid(10,10,newGrid);
+		for(int i=startRow; i<endRow-1; i++ ) {
+			for( int j=startCol; j<endCol-1; j++ ) {
+				// System.out.println("The value of the emptyGrid at row " + i + " and column " + j + " is " + emptyGrid[i][j]);
+				this.newGrid[i][j]=emptyGrid[i][j];
+			}
+		}
+		// System.out.println("I am printing the newGrid below this...");
+		// printGrid(10,10,newGrid);
+	}
 
-    boolean update() {
-        boolean change=false;
-        // System.out.println("The startRow is " + startRow + " and the endRow is " + (endRow-1));
-        System.out.println("The startCol is " + startCol + " and the endCol is " + (endCol-1));
-        for( int i = startRow; i<endRow-1; i++ ) {
-            for( int j = startCol; j<endCol-1; j++ ) {
-                int num = (newGrid[i][j] % 4) + (newGrid[i-1][j] / 4) + (newGrid[i+1][j] / 4) + (newGrid[i][j-1] / 4) + (newGrid[i][j+1] / 4);
-                emptyGrid[i][j] = num;
-                if (newGrid[i][j]!=emptyGrid[i][j]) {
-                    change=true;
-                }
-            }
-        }
-        if (change) { nextTimeStep(); }
-        return change;
-            
-    }
+	boolean update() {
+		boolean change=false;
+		// System.out.println("The startRow is " + startRow + " and the endRow is " + (endRow-1));
+		// System.out.println("The startCol is " + startCol + " and the endCol is " + (endCol-1));
+		// printGrid(10,10,newGrid);
+		// System.out.println(newGrid[1][1]);
+		for( int i = startRow; i<endRow-1; i++ ) {
+			for( int j = startCol; j<endCol-1; j++ ) {
+				int num = (newGrid[i][j] % 4) + (newGrid[i-1][j] / 4) + (newGrid[i+1][j] / 4) + (newGrid[i][j-1] / 4) + (newGrid[i][j+1] / 4);
+				// System.out.println("The num is " + num);
+				emptyGrid[i][j] = num;
+				if (newGrid[i][j]!=emptyGrid[i][j]) {
+					// System.out.println("The change is true.");
+					change=true;
+				}
+			}
+		}
+		// printGrid(10,10,emptyGrid);
+		if (change) { nextTimeStep(); }
+		return change;
+			
+	}
 
 
 	public Boolean compute() {
-		System.out.println("My name is " + name + " and my area is " + (rows-2)*(columns-2));
+		// System.out.println("My name is " + name + " and my area is " + (rows-2)*(columns-2));
 		int end = endNum;
 		if ((rows-2)*(columns-2) <= 9) {
 			return update();
 		} else {
 			int split = ((rows-2)/2)+2;
 			int num = ((rows-2)/2);
-			int start = num
-			// int split = ((rows-2)/2)+2;
-			System.out.println("The split is " + split);
-			System.out.println("The startRow is " + 1 + " and the endRow is " + (split-1));
-			System.out.println("The startCol is " + (split-1) + " and the endCol is " + (end));
-			// MySolution topLeft = new MySolution(end,split,split,1,1,split,split,newGrid,emptyGrid,"topLeft");
-			MySolution topRight = new MySolution(end,split,split,1,split-1,split,end,newGrid,emptyGrid,"topRight");
-			// MySolution bottomLeft = new MySolution(end,split,split,split-1,1,end,split,newGrid,emptyGrid,"bottomLeft");
-			// MySolution bottomRight = new MySolution(end,split,split,split-1,split-1,end,end,newGrid,emptyGrid,"bottomRight");
+			int start = split-1;
+			if (prevStart != 0) {
+				start = (prevStart)+(num);
+			}
+			
+
+			// System.out.println("The split is " + split);
+			// System.out.println("The startRow is " + 1 + " and the endRow is " + (split-1));
+			// System.out.println("The startCol is " + (start) + " and the endCol is " + (end));
+			// System.out.println("The end value is " + end);
+			// System.out.println("The value of start is " + start);
+
+			MySolution topLeft = new MySolution(start,end,split,split,1,1,split,split,newGrid,emptyGrid);
+			MySolution topRight = new MySolution(start,end,split,split,1,start,split,end,newGrid,emptyGrid);
+			MySolution bottomLeft = new MySolution(start,end,split,split,start,1,end,split,newGrid,emptyGrid);
+			MySolution bottomRight = new MySolution(start,end,split,split,start,start,end,end,newGrid,emptyGrid);
 
 			
-			// topLeft.fork();
+			topLeft.fork();
 			topRight.fork();
-			// bottomLeft.fork();
+			bottomLeft.fork();
 
-			// boolean ans1 = bottomRight.compute();
-			// boolean ans2 = topLeft.join();
+			boolean ans1 = bottomRight.compute();
+			boolean ans2 = topLeft.join();
 			boolean ans3 = topRight.join();
-			// boolean ans4 = bottomLeft.join();
+			boolean ans4 = bottomLeft.join();
 
-			// return ans1 & ans2 & ans3 & ans4;
-			return ans3;
+			return ans1 & ans2 & ans3 & ans4;
+			// return ans4;
  
 		}
 
@@ -183,10 +202,10 @@ public class MySolution extends RecursiveTask<Boolean> {
 			String file = "8_by_8_all_4copy.csv";
 			MySolution obj = new MySolution(readArrayFromCSV(file));
 			ForkJoinPool pool = new ForkJoinPool();
-            System.out.println("The rows of the input grid are " + obj.rows);
-            System.out.println("The columns of the input grid are " + obj.columns);
+			System.out.println("The rows of the input grid are " + obj.rows);
+			System.out.println("The columns of the input grid are " + obj.columns);
 			pool.invoke(obj);
-			// pool.invoke(obj);
+			pool.invoke(obj);
 			obj.printGrid(obj.rows,obj.columns,obj.newGrid);
 
 		} catch (Exception e) {
