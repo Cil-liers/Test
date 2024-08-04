@@ -106,7 +106,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 			// boolean ans3 = topRight.join();
 			return ans1 & ans2 & ans3 & ans4;
 			// return ans1 & ans2 & ans3;
-
+ 
 		}
 
 	}
