@@ -205,7 +205,7 @@ public class MySolution extends RecursiveTask<Boolean> {
 			System.out.println("The rows of the input grid are " + obj.rows);
 			System.out.println("The columns of the input grid are " + obj.columns);
 			pool.invoke(obj);
-			pool.invoke(obj);
+			// pool.invoke(obj);
 			obj.printGrid(obj.rows,obj.columns,obj.newGrid);
 
 		} catch (Exception e) {
