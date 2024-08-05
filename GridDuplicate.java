@@ -72,14 +72,21 @@ public class GridDuplicate {
     
 
     //for the next timestep - copy updateGrid into grid
-    public void nextTimeStep(int rs, int cs, int re, int ce) {
-        for(int i=rs; i<re; i++ ) {
-            for( int j=cs;  j<ce; j++ ) {
+    // public void nextTimeStep(int rs, int cs, int re, int ce) {
+    //     for(int i=rs; i<re; i++ ) {
+    //         for( int j=cs;  j<ce; j++ ) {
+    //             this.grid[i][j]=updateGrid[i][j];
+    //         }
+    //     }
+    // }
+    
+    public void nextTimeStep() {
+        for (int i=1; i<rows-1; i++) {
+            for (int j=1; j<columns-1; j++) {
                 this.grid[i][j]=updateGrid[i][j];
             }
         }
     }
-    
     
     boolean update(int rowStart, int colStart, int rowEnd, int colEnd) {
         // System.out.println("We are now in the update function...");
@@ -89,7 +96,7 @@ public class GridDuplicate {
         for( int i = rowStart; i<rowEnd; i++ ) {
             for( int j = colStart; j<colEnd; j++ ) {
                 int num = (grid[i][j] % 4) + (grid[i-1][j] / 4) + (grid[i+1][j] / 4) + (grid[i][j-1] / 4) + (grid[i][j+1] / 4);
-                // System.out.println("The row is " + i + " and the column and the column is " + j);
+                // System.out.println("The row is " + i + " and the column is " + j + " and the num is " + num + ".");
                 // System.out.println("The num is " + num);
                 updateGrid[i][j] = num;
                 if (grid[i][j]!=updateGrid[i][j]) {
@@ -100,7 +107,7 @@ public class GridDuplicate {
         }
         // System.out.println("We are now printing the grid below...");
         // printGrid();
-        if (change) { nextTimeStep(rowStart, colStart, rowEnd, colEnd); }
+        // if (change) { nextTimeStep(rowStart, colStart, rowEnd, colEnd); }
         // printGrid();
         return change;
             

@@ -37,10 +37,12 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String file = "8_by_8_all_4copy.csv";
+		String file = "517_by_517_centre_534578.csv";
 		GridDuplicate grid = new GridDuplicate(readArrayFromCSV(file));
 		ForkJoinPool pool = new ForkJoinPool();
+		// pool.invoke(new MyThread(grid));
 		while(pool.invoke(new MyThread(grid))) {
+			grid.nextTimeStep();
 			// grid.printGrid();
 		}
 		System.out.println("What is happening");

@@ -31,7 +31,7 @@ public class MyThread extends RecursiveTask<Boolean> {
 
 	public Boolean compute() {
 		// System.out.println("The area is " + (endRow-startRow)*((endCol-1)-startCol));
-		if ((endRow-startRow)*((endCol-1)-startCol) <= 9) {
+		if ((endRow-startRow)*((endCol-1)-startCol) <= 64) {
 			// grid.printGrid();
 			// System.out.println("The startRow is " + startRow + " and the endCol is " + endCol);
 			// System.out.println("The startCol is " + startCol + " and the endRow is " + endRow); 
