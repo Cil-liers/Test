@@ -5,6 +5,10 @@ import java.io.IOException;
 
 public class Main {
 
+
+	static long timeBefore;
+	static long timeAfter;
+
 	public static int [][] readArrayFromCSV(String filePath) {
         int [][] array = null;
             try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -33,19 +37,25 @@ public class Main {
         return array;
     }
 
-    
+    private static void tick() {
+    	timeBefore = System.currentTimeMillis();
+    }
+
+    private static void tock() {
+    	timeAfter = System.currentTimeMillis();
+    }
 
 	public static void main(String[] args) {
 
 		String file = "517_by_517_centre_534578.csv";
 		GridDuplicate grid = new GridDuplicate(readArrayFromCSV(file));
 		ForkJoinPool pool = new ForkJoinPool();
-		// pool.invoke(new MyThread(grid));
+		tick();
 		while(pool.invoke(new MyThread(grid))) {
 			grid.nextTimeStep();
-			// grid.printGrid();
 		}
-		System.out.println("What is happening");
+		tock();
+		System.out.println("The time taken was " + (timeAfter-timeBefore) + " ms");
 		try {
 			grid.gridToImage("test3.png");
 		} catch (IOException e) {
