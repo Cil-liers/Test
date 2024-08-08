@@ -6,12 +6,12 @@ import javax.imageio.ImageIO;
 import java.util.Arrays;
 
 //This class is for the grid for the Abelian Sandpile cellular automaton
-public class GridDuplicate {
+public class Grid {
     private int rows, columns;
     private int [][] grid; //grid 
     private int [][] updateGrid;//grid for next time step
     
-    public GridDuplicate(int w, int h) {
+    public Grid(int w, int h) {
         rows = w+2; //for the "sink" border
         columns = h+2; //for the "sink" border
         grid = new int[this.rows][this.columns];
@@ -26,7 +26,7 @@ public class GridDuplicate {
     }
 
 
-    public GridDuplicate(int[][] newGrid) {
+    public Grid(int[][] newGrid) {
         this(newGrid.length,newGrid[0].length); //call constructor above
         
         //don't copy over sink border
@@ -39,7 +39,7 @@ public class GridDuplicate {
 
     // We have the empty grid initialised and we have the given grid put into the grid variable.
 
-    public GridDuplicate(GridDuplicate copyGrid) {
+    public Grid(Grid copyGrid) {
         this(copyGrid.rows,copyGrid.columns); //call constructor above
         /* grid  initialization */
         for(int i=0; i<rows; i++ ) {

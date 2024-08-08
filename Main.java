@@ -47,8 +47,8 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String file = "517_by_517_centre_534578.csv";
-		GridDuplicate grid = new GridDuplicate(readArrayFromCSV(file));
+		String file = "65_by_65_all_4.csv";
+		Grid grid = new Grid(readArrayFromCSV(file));
 		ForkJoinPool pool = new ForkJoinPool();
 		tick();
 		while(pool.invoke(new MyThread(grid))) {

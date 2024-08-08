@@ -7,9 +7,9 @@ public class MyThread extends RecursiveTask<Boolean> {
 	int startCol;
 	int endRow;
 	int endCol;
-	GridDuplicate myGrid;
+	Grid myGrid;
 
-	public MyThread(GridDuplicate grd) {
+	public MyThread(Grid grd) {
 		myGrid = grd;
 		startRow = 1;
 		startCol = 1;
@@ -17,7 +17,7 @@ public class MyThread extends RecursiveTask<Boolean> {
 		endCol = grd.getColumns()+1;
 	}
 
-	public MyThread(GridDuplicate grd, int startR, int startC, int endR, int endC) {
+	public MyThread(Grid grd, int startR, int startC, int endR, int endC) {
 		myGrid = grd;
 		startRow = startR;
 		startCol = startC;
