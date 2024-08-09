@@ -1,4 +1,8 @@
-//Copyright M.M.Kuttel 2024 CSC2002S, UCT
+/*
+    Author: Prof Michelle Kuttel (adapted: Benjamin Cilliers)
+*/
+
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
